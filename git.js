@@ -131,7 +131,9 @@ module.exports = function(args, selfData, callback){
       addThemes(commands);
       commands.push(['commit', '-m', commitMessage(args)]);
       for (var t in repo){
-        commands.push(['push', '-u', t, 'master:' + repo[t].branch, '--force']);
+        commands.push(['remote', 'remove', 'origin']);
+        commands.push(['remote', 'add', 'origin', '-t', repo[t].branch, repo[t].url]);
+        commands.push(['push', '-u', 'origin', 'master:' + repo[t].branch, '--force']);
       }
 
       async.eachSeries(commands, function(item, next){
